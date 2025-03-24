@@ -1,32 +1,25 @@
-// src/components/EventList.jsx
 import React, { useEffect, useState } from "react";
 import EventItem from "./EventItem";
-import EventForm from "./EventForm";
 
 const EventList = () => {
     const [events, setEvents] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:5000/events")
-            .then((res) => res.json())
-            .then((data) => setEvents(data))
-            .catch((err) => console.error("Error fetching events:", err));
+        fetchEvents();
     }, []);
 
-    const addEvent = (newEvent) => {
-        fetch("http://localhost:5000/events", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newEvent),
-        })
-        .then((res) => res.json())
-        .then((data) => setEvents([...events, data]))
-        .catch((err) => console.error("Error adding event:", err));
+    const fetchEvents = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/events");
+            const data = await response.json();
+            setEvents(data);
+        } catch (error) {
+            console.error("Error fetching events:", error);
+        }
     };
 
     return (
         <div>
-            <EventForm addEvent={addEvent} />
             <h2>Event List</h2>
             {events.length > 0 ? (
                 events.map((event) => <EventItem key={event._id} event={event} />)
