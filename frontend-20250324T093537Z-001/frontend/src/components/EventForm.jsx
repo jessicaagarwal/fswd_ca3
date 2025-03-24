@@ -1,0 +1,34 @@
+// src/components/EventForm.jsx
+import React, { useState } from "react";
+
+const EventForm = ({ addEvent }) => {
+    const [event, setEvent] = useState({
+        name: "",
+        date: "",
+        location: "",
+    });
+
+    const handleChange = (e) => {
+        setEvent({ ...event, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        addEvent(event);
+        setEvent({ name: "", date: "", location: "" });
+    };
+
+    return (
+        <div>
+            <h2>Add New Event</h2>
+            <form onSubmit={handleSubmit}>
+                <input type="text" name="name" placeholder="Event Name" value={event.name} onChange={handleChange} required />
+                <input type="date" name="date" value={event.date} onChange={handleChange} required />
+                <input type="text" name="location" placeholder="Location" value={event.location} onChange={handleChange} required />
+                <button type="submit">Add Event</button>
+            </form>
+        </div>
+    );
+};
+
+export default EventForm;
